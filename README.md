@@ -19,6 +19,13 @@ features:
 
 0. Install the requirements for this repository: 'pip install -r requirements.txt'
 
+1. Setup the project, API, and credentials in Google
+   1. Go to [Google Developers Console](https://console.developers.google.com/projectcreate) and
+      create a new project
+
+      ![New Project](readme_pics/create_project.jpg)
+   2. Do more
+
 1. Go to the [Google Apps Script API Python Quickstart](https://developers.google.com/apps-script/api/quickstart/python)
    and follow "Step 1" to create a new console project, enable the API and
    receive credentials. Place the "credentials.json" file in a '.credentials'
