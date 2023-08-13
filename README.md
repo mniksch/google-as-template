@@ -24,7 +24,52 @@ features:
       create a new project
 
       ![New Project](readme_pics/create_project.jpg)
-   2. Do more
+
+      after the project is created, click "Select Project"
+      ![Select Project](readme_pics/select_project.jpg)
+
+   2. Go to the [API Dashboard](https://console.cloud.google.com/apis/dashboard) and click
+      "ENABLE APIS AND SERVICES"
+      ![Enable APIS and Services](readme_pics/enable_apis.jpg)
+
+      In the search bar, you'll need to enter "Google Sheets API" and then click through to
+      the API and hit "ENABLE"
+      ![ENABLE](readme_pics/sheets_api.jpg)
+
+      Do the same things for "Google Drive API"
+      ![ENABLE](readme_pics/drive_api.jpg)
+
+   3. Create [service account credentials to access the api](https://console.cloud.google.com/iam-admin/serviceaccounts/create)
+      
+      This account is an automation account and is associated with the email account you used
+      to create the project:
+
+      ![Service Account Details](readme_pics/service_account.jpg)
+
+      After creation, assign a role to the account ("Owner" is the most expansive and is
+      used here in this example, although you might prefer narrower permissions)
+      
+      ![Account role](readme_pics/account_role.jpg)
+
+      Click "DONE" to finish creating the account without granting other users access.
+      Google will take you back to a list of service accounts for the project. Click
+      the "three dots" options at the right of your new service account and select the
+      "Manage keys" option.
+
+      ![Manage keys](readme_pics/manage_keys.jpg)
+
+      Then, click "Add Key"->"Create new key" and select "JSON"
+
+      ![Create new key](readme_pics/create_new_key.jpg)
+
+      ![JSON](readme_pics/json.jpg)
+
+      Clicking "CREATE" will create the credentials and download a json file to your local
+      computer. Use that in the next step.
+
+   4. Save the json file from the prior step in a '.credentials' folder off the main directory
+      and rename it as "credentials.json". Also, note the name of the new project you created
+      in the last step. (If you forget, it's defined in the second line of the credentials file.)
 
 1. Go to the [Google Apps Script API Python Quickstart](https://developers.google.com/apps-script/api/quickstart/python)
    and follow "Step 1" to create a new console project, enable the API and
