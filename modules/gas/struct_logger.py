@@ -15,7 +15,6 @@ import structlog
 
 
 class PapertrailContextFilter(logging.Filter):
-
     def __init__(self, hostname, jobname, *args, **kwargs):
         # To conform to log coloration on PT, which splits by whitespace
         self.hostname = hostname.replace(" ", "")
@@ -49,26 +48,24 @@ def get_logger(jobname, cfg):
     logger = structlog.wrap_logger(logger, wrapper_class=structlog.BoundLogger)
 
     # Add filter and define the baseline format
-    pt_filter = PapertrailContextFilter(cfg['hostname'], jobname)
+    pt_filter = PapertrailContextFilter(cfg["hostname"], jobname)
     logger._logger.addFilter(pt_filter)
-    formatter = logging.Formatter(
-        cfg['format'], datefmt=cfg['date_format']
-    )
+    formatter = logging.Formatter(cfg["format"], datefmt=cfg["date_format"])
 
     # Setup the remote logging
-    if 'remote_address' in cfg:
-        destination_address, destination_port = cfg['remote_address']
+    if "remote_address" in cfg:
+        destination_address, destination_port = cfg["remote_address"]
         syslog = SysLogHandler(address=(destination_address, destination_port))
         syslog.setFormatter(formatter)
         logger._logger.addHandler(syslog)
 
     # Setup the local logging
     local_handler = logging.StreamHandler(sys.stdout)
-    local_handler.setLevel(cfg['local_level'])
+    local_handler.setLevel(cfg["local_level"])
     local_handler.setFormatter(formatter)
     logger._logger.addHandler(local_handler)
 
     # This line allows subroutine calls to temporarily reference themselves distinctly
-    logger = logger.bind(sub='main')
+    logger = logger.bind(sub="main")
 
     return logger
