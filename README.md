@@ -36,50 +36,30 @@ features:
       the API and hit "ENABLE"
       ![ENABLE](readme_pics/sheets_api.jpg)
 
-      Do the same things for "Google Drive API"
+      Do the same things for "Google Drive API" and "Apps Script"
       ![ENABLE](readme_pics/drive_api.jpg)
 
-   3. Create [service account credentials to access the api](https://console.cloud.google.com/iam-admin/serviceaccounts/create)
-      
-      This account is an automation account and is associated with the email account you used
-      to create the project:
+      ![ENABLE](readme_pics/apps_script.jpg)
 
-      ![Service Account Details](readme_pics/service_account.jpg)
+   3. Create credentials to access this flow. We cannot use a "service account" for this
+      purpose because the Apps Script API is restricted for use against service accounts.
 
-      After creation, assign a role to the account ("Owner" is the most expansive and is
-      used here in this example, although you might prefer narrower permissions)
-      
-      ![Account role](readme_pics/account_role.jpg)
+      Instead, you will need to go the [credentials](https://console.cloud.google.com/apis/credentials/)
+      and follow these steps:
 
-      Click "DONE" to finish creating the account without granting other users access.
-      Google will take you back to a list of service accounts for the project. Click
-      the "three dots" options at the right of your new service account and select the
-      "Manage keys" option.
-
-      ![Manage keys](readme_pics/manage_keys.jpg)
-
-      Then, click "Add Key"->"Create new key" and select "JSON"
-
-      ![Create new key](readme_pics/create_new_key.jpg)
-
-      ![JSON](readme_pics/json.jpg)
-
-      Clicking "CREATE" will create the credentials and download a json file to your local
-      computer. Use that in the next step.
-
-   4. Save the json file from the prior step in a '.credentials' folder off the main directory
-      and rename it as "credentials.json". Also, note the name of the new project you created
-      in the last step. (If you forget, it's defined in the second line of the credentials file.)
-
-1. Go to the [Google Apps Script API Python Quickstart](https://developers.google.com/apps-script/api/quickstart/python)
-   and follow "Step 1" to create a new console project, enable the API and
-   receive credentials. Place the "credentials.json" file in a '.credentials'
-   folder off the main directory. Also, note the new project name for later.
+      a. Select Apps Script API and "user"
+      a. Select "+ CREATE CREDENTIALS"->"OAuth Client ID"
+      b. Application type = "Desktop App"
+      c. Click "CREATE"
+      d. Download the credentials created in this step
+      e. Go to the [OAuth Consent Screen settings](https://console.cloud.google.com/apis/credentials/consent)
+         and add yourself as a test user for the account.
 
 2. Edit the settings/settings.yml file as follows (all in google_settings):
    1. Change the project_name setting to the one you created in Step 1.
-   2. Change the project_dir setting to the key for your Google Drive folder
-      (That's the long string of random letters after the 'folders/' part of the URL)
+   2. Change the project_dir setting to the key for your Google Drive folder.
+      That's the long string of random letters after the 'folders/' part of the URL.
+      If you haven't already, create a Drive folder for this project and copy that key to settings.
    3. Change the default script name in script_name
    4. Modify any of the remaining defaults if necessary (especially scopes)
 

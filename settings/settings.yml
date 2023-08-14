@@ -25,7 +25,7 @@ google_settings:  # First three lines are based on your project
 log_settings:
   format: '%(asctime)s %(hostname)s %(jobname)s: [%(levelname)s] %(message)s'
   date_format: '%b %d %H:%M:%S'
-  hostname: mn_laptop  # Change this for different hosts
+  hostname: local_laptop  # Change this for different hosts
   local_level: 10  # set to int level for local logging (60=none, 50=critical, 10=debug)
   xremote_address:  # To enable remote logging, remove the x at the front of the label
     - loggingaddress.com  # replace with your log destination
