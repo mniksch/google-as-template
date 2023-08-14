@@ -11,6 +11,7 @@ import os
 import shutil
 import csv
 
+from time import time  # for displaying duration comparisons
 from modules.gas.struct_logger import get_logger
 from modules.gas import googleapi
 from modules.gas import filework
@@ -34,6 +35,7 @@ def main(cfg):
     # This next line creates an object we use whenever we need to get credentials.
     # We use a class in order to make sure it's reauthorizing when it gets close to
     # timing out.
+    t0 = time()
     creds = googleapi.Creds(cfg)
 
     # The line above is only called once, but everytime we want to use credentials,
@@ -58,19 +60,26 @@ def main(cfg):
     googleapi.move_file(new_doc.id, cfg["project_dir"], creds.serv("drive", cfg), cfg)
     googleapi.add_link_permissions(new_doc.id, creds.serv("drive", cfg), cfg)
 
+    cfg["logger"].debug("Total time to create and move {:.2f} sec".format(time() - t0))
+
+    # ---
     # Now, we'll load the example file into the first tab of the sheet
     # This first method is a quick way to do it via gspread, but has some limitations
     cfg["logger"].info("Writing example csv data to the first tab")
     example_data = open(EXAMPLE_DATA, "r").read()
+    t0 = time()
     gc.import_csv(new_doc.id, example_data)
     new_doc.sheet1.update_title("Raw_csv_sheet")
+    cfg["logger"].debug("Total time to create {:.2f} sec".format(time() - t0))
 
+    # ---
     # As a second method, we'll load the same data, but manipulate the csv data as a
     # list of lists first (and use a different method to load it)
     cfg["logger"].info("Writing same csv data to the second tab with lol function")
     with open(EXAMPLE_DATA, "r") as f:
         reader = csv.reader(f)
         l_o_l_csv_data = [row for row in reader]
+    t0 = time()
     ws = new_doc.add_worksheet(
         "Written_csv_sheet", len(l_o_l_csv_data), len(l_o_l_csv_data[0])
     )
@@ -78,7 +87,9 @@ def main(cfg):
     # The function below will write the data to a sheet using the update_cells method
     # in the gspread library. It's more efficient for sparse data.
     googleapi.write_lol_to_sheet(ws, l_o_l_csv_data, cfg)
+    cfg["logger"].debug("Total time to create {:.2f} sec".format(time() - t0))
 
+    # ---
     # As yet a third method, we'll send it to an AppsScript function directly
     cfg["logger"].info("Writing same csv data to the third tab with writeData")
 
@@ -86,6 +97,7 @@ def main(cfg):
     l_o_l_csv_data[0].insert(2, "Name length")
     for i in range(1, len(l_o_l_csv_data)):
         l_o_l_csv_data[i].insert(2, "=len(B" + str(i + 1) + ")")
+    t0 = time()
     ws = new_doc.add_worksheet(
         "AS_written_csv", len(l_o_l_csv_data), len(l_o_l_csv_data[0])
     )
@@ -100,6 +112,7 @@ def main(cfg):
         creds.serv("script", cfg),
         cfg,
     )
+    cfg["logger"].debug("Total time to create {:.2f} sec".format(time() - t0))
 
     # Now, we'd like to format this last tab. Formatting requires Apps Script, so we'll
     # Need to push an appscript file to the project and then run it.
@@ -129,7 +142,6 @@ def main(cfg):
 
     rows = 4 + num_states  # Title row at top, header row, sum row, blank row
     cols = 5  # Blank column, state, count, count since 1900, blank column
-    ws = new_doc.add_worksheet("State_summary", rows, cols)
     output_matrix = [
         (1, 1, "Summary of Presidents by state"),
         (2, 2, "State"),
@@ -155,7 +167,11 @@ def main(cfg):
         ]
     )  # There's one other summary, but we'll demonstrate that in the Apps Script
 
+    t0 = time()
+    ws = new_doc.add_worksheet("State_summary", rows, cols)
     googleapi.send_bulk_data(ws, output_matrix, cfg)
+    cfg["logger"].debug("Total time to create {:.2f} sec".format(time() - t0))
+    t0 = time()
     googleapi.call_apps_script(
         {
             "function": "formatSummarySheet",
@@ -164,6 +180,7 @@ def main(cfg):
         creds.serv("script", cfg),
         cfg,
     )
+    cfg["logger"].debug("Total time to format {:.2f} sec".format(time() - t0))
 
     # Finally, let's read the data from the tables and save it locally
     # One approach is to use the Apps Script function included in the setup:

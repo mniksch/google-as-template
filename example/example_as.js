@@ -17,7 +17,7 @@ function doExampleFormatting(ssKey, sheetName) {
   sheet.getRange('A1:H1').setFontWeight('bold');
   sheet.getRange('A1:H1').setWrap(true);
   
-  sheet.setColumnWidth(1,76);
+  sheet.setColumnWidth(1,80);
   sheet.setColumnWidth(2,172);
   sheet.setColumnWidth(3,81);
   sheet.setColumnWidth(4,302);

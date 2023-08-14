@@ -47,11 +47,15 @@ features:
       Instead, you will need to go the [credentials](https://console.cloud.google.com/apis/credentials/)
       and follow these steps:
 
-      a. Select Apps Script API and "user"
+
       a. Select "+ CREATE CREDENTIALS"->"OAuth Client ID"
-      b. Application type = "Desktop App"
+
+      b. Application type = "Desktop App"; pick a descriptive name
+
       c. Click "CREATE"
+
       d. Download the credentials created in this step
+
       e. Go to the [OAuth Consent Screen settings](https://console.cloud.google.com/apis/credentials/consent)
          and add yourself as a test user for the account.
 
@@ -85,9 +89,9 @@ features:
    - Close the dialog. You should be ready to execute.
 
 5. In order to run these scripts with the API, you'll need to use a
-   "Deployment" in the newly created project. In the project (in the Drive folder):
-   - Go to Publish->Deploy as API executable...
-   - Copy the "Current API ID" value and replace the '' in
+   "Deployment" in the newly created script. In the new Script file (in the Drive folder):
+   - Go to Deploy->New Deployment as API executable, name the deployement and "Deploy"
+   - Copy the "Deployment ID" value and replace the '' in
      settings/local_settings.yml next to 'API_ID' with this value 
      then hit close. _(This file is created by step 3.)_
 
@@ -135,7 +139,7 @@ to the local scripts folder (so you can package or push to git.)
 The second does the opposite, allowing you to overwrite the online project
 with the local script files.
 
-_Both functions a "destructive" and overwrite the destination._ However, if your
+_Both functions are "destructive" and overwrite the destination._ However, if your
 local directory has a script not in the online project, it won't be deleted with
 a pull. Similarly, if you have a script in the online project that's not in the
 local directory, it won't be deleted with a push. (If that's your intent, you'll
